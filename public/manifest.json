@@ -1,4 +1,6 @@
 {
+  "homepage": "C:\\Users\\79275\\git\\hr-extension\\build",
+  "start_url": "C:\\Users\\79275\\git\\hr-extension\\build",
   "short_name": "React App",
   "name": "Create React App Sample",
   "icons": [
@@ -18,7 +20,6 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
