@@ -1,9 +1,13 @@
 import Button from '../Button'
 import Input from '../Input'
 import styles from './Setting.module.sass'
-import { useState } from 'react'
+import { useState, FC } from 'react'
 
-const Setting = () => {
+interface SettingProps {
+  setConnected: (connected: boolean) => void;
+}
+
+const Setting: FC<SettingProps> = ({ setConnected }) => {
   const [serverUrl, setServerUrl] = useState<string>('')
   const [databaseUrl, setDatabaseUrl] = useState<string>('')
   const [token, setToken] = useState<string>('')
@@ -18,7 +22,7 @@ const Setting = () => {
       <Input value={portUrl} label={'Порт подключения'} placeholer={'5050'} setValue={setPortUrl} />
       <Input value={token} label={'Токен доступа'} placeholer={'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpX...'} setValue={setToken} />
       <div className={styles.buttonWrapper}>
-        <Button text={'Подключиться'} callback={() => { }} disabled={!(serverUrl && databaseUrl && token && portUrl)} />
+        <Button text={'Подключиться'} callback={() => { setConnected(true) }} disabled={!(serverUrl && databaseUrl && token && portUrl)} />
       </div>
     </div>
   )

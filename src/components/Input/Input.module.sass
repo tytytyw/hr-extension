@@ -5,7 +5,14 @@
     .input
         width: 100%
         border-radius: 6px
-        border: 1px solid var(--text-main)
-        height: 2.5em
+        border: 1px solid var(--text-secondary)
+        height: 2.5rem
         padding: 0 1em
         outline: none
+        &:focus
+            border: 1px solid var(--blue)
+    .textarea
+        resize: none
+        height: 200px
+        padding: 1em
+        font-family: inherit
