@@ -1,9 +1,9 @@
+// @ts-nocheck
 import { useState, useEffect, FC } from 'react'
 import styles from './VacanciesList.module.sass'
 import Input from '../Input'
 import Button from '../Button'
 import classnames from 'classnames'
-
 
 interface VacanciesListProps {
     setConnected: (connected: boolean) => void
@@ -32,6 +32,15 @@ const VacanciesList: FC<VacanciesListProps> = ({ setConnected }) => {
         const selectValueItem = vacancies.find((item) => item?.id === selectValue);
         return selectValueItem?.title;
     };
+
+    const sendCadidate = () => {
+        if (selectValue) {
+            chrome && chrome.tab && chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+                console.log(tabs[0].url);
+            });
+            // setConnected(false)
+        }
+    }
 
 
     return (
@@ -77,7 +86,6 @@ const VacanciesList: FC<VacanciesListProps> = ({ setConnected }) => {
                                         onClick={() => {
                                             setOpen(false);
                                             setSelectValue(item.id);
-                                            // onChange(item.id);
                                         }}
                                         className={classnames({
                                             [styles.option]: true,
@@ -93,7 +101,7 @@ const VacanciesList: FC<VacanciesListProps> = ({ setConnected }) => {
                 </div>
             </div>
             <Input setValue={setComment} label={'Комментарий'} type='textarea' />
-            <Button text='Добавить кандидата' disabled={!selectValue} callback={() => { console.log(window.location.href); setConnected(false) }} />
+            <Button text='Добавить кандидата' disabled={!selectValue} callback={sendCadidate} />
         </div>
     );
 };

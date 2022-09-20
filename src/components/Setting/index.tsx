@@ -2,16 +2,35 @@ import Button from '../Button'
 import Input from '../Input'
 import styles from './Setting.module.sass'
 import { useState, FC } from 'react'
+import classNames from 'classnames'
+
+interface requestParamsProps {
+  serverUrl: string,
+  databaseUrl: string,
+  portUrl: string,
+  token: string
+}
 
 interface SettingProps {
   setConnected: (connected: boolean) => void;
+  requestParams: requestParamsProps;
+  saveRequestParams: (requestParams: requestParamsProps) => void,
 }
 
-const Setting: FC<SettingProps> = ({ setConnected }) => {
-  const [serverUrl, setServerUrl] = useState<string>('')
-  const [databaseUrl, setDatabaseUrl] = useState<string>('')
-  const [token, setToken] = useState<string>('')
-  const [portUrl, setPortUrl] = useState<string>('')
+const Setting: FC<SettingProps> = ({ setConnected, requestParams, saveRequestParams }) => {
+  const [serverUrl, setServerUrl] = useState<string>(requestParams.serverUrl)
+  const [databaseUrl, setDatabaseUrl] = useState<string>(requestParams.databaseUrl)
+  const [token, setToken] = useState<string>(requestParams.token)
+  const [portUrl, setPortUrl] = useState<string>(requestParams.portUrl)
+
+  const connectToApi = () => {
+    if (serverUrl && databaseUrl && token && portUrl) {
+      setConnected(true)
+
+      saveRequestParams({ serverUrl, databaseUrl, token, portUrl })
+
+    }
+  }
 
 
   return (
@@ -22,8 +41,12 @@ const Setting: FC<SettingProps> = ({ setConnected }) => {
       <Input value={portUrl} label={'Порт подключения'} placeholer={'5050'} setValue={setPortUrl} />
       <Input value={token} label={'Токен доступа'} placeholer={'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpX...'} setValue={setToken} />
       <div className={styles.buttonWrapper}>
-        <Button text={'Подключиться'} callback={() => { setConnected(true) }} disabled={!(serverUrl && databaseUrl && token && portUrl)} />
+        <Button text={'Подключиться'} callback={connectToApi} disabled={!(serverUrl && databaseUrl && token && portUrl)} />
       </div>
+      {requestParams.portUrl && requestParams.databaseUrl && requestParams.serverUrl && requestParams.token
+        ? <div className={classNames(styles.buttonWrapper, styles.bottomBtn)}>
+          <Button text={'Назад'} callback={() => { setConnected(true) }} />
+        </div> : null}
     </div>
   )
 }
