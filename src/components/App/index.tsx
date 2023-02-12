@@ -3,15 +3,20 @@ import Header from '../Header'
 import Setting from '../Setting';
 import { useState } from 'react'
 import VacanciesList from '../VacanciesList'
+import Loader from '../Loader'
 
 const App = () => {
     const [connected, setConnected] = useState<boolean>(false)
     const [requestParams, setRequestParams] = useState({
-        serverUrl: '',
+        serverUrl: 'https://arenda.topfactor.pro/RecLCH/hs/extension',
         databaseUrl: '',
         portUrl: '',
-        token: ''
+        token: '0JHRg9GA0LXQu9C+0LzQvtCy0LAg0JDQvdC90LA6MTIzNA=='
     })
+    const [showLoader, setShowLoader] = useState<boolean>(false)
+
+    const [vacancies, setVacancies] = useState<Array<{ GUID: string, title: string }>>([])
+
 
 
     return (
@@ -19,8 +24,20 @@ const App = () => {
             <Header connected={connected} setConnected={setConnected} />
 
             {connected
-                ? <VacanciesList setConnected={setConnected} />
-                : <Setting setConnected={setConnected} requestParams={requestParams} saveRequestParams={setRequestParams} />}
+                ? <VacanciesList
+                    vacancies={vacancies}
+                    requestParams={requestParams}
+                    setShowLoader={setShowLoader}
+                />
+                : <Setting
+                    setConnected={setConnected}
+                    requestParams={requestParams}
+                    saveRequestParams={setRequestParams}
+                    setVacancies={setVacancies}
+                    vacancies={vacancies}
+                    setShowLoader={setShowLoader}
+                />}
+            {showLoader ? <Loader /> : ''}
         </div>
     );
 }

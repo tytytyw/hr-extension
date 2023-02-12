@@ -70,9 +70,28 @@
             max-height: 300px
             border: 1px solid var(--blue)
             border-radius: 0 0 8px 8px
-            border-top: 0
+            // border-top: 0
             box-shadow: 0 5px 0 5px #fff
             animation: heigthAnimate .5s
+            scrollbar-width: 5px
+            scrollbar-color: var(--blue)
+            &::-webkit-scrollbar-track
+                box-shadow: none
+                -webkit-box-shadow: none
+                background-color: #fff
+
+            &::-webkit-scrollbar
+                width: 5px
+                height: 5px
+                background-color: #fff
+
+            &::-webkit-scrollbar-thumb
+                background-color: var(--blue)
+                border-radius: 10px
+                -webkit-border-radius: 10px
+                -moz-border-radius: 10px
+                -ms-border-radius: 10px
+                -o-border-radius: 10px
 
         .contentWrap
             position: absolute
