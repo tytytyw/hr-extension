@@ -15,7 +15,7 @@ const Input: FC<InputProps> = ({ label = '', placeholer = '', setValue, type = '
         <div className={styles.wrapper}>
             <p className={styles.label}>{label}</p>
             {type === 'text' ? <input className={styles.input} value={value} type="text" onChange={(e) => setValue(e.target.value)} placeholder={placeholer && 'Пример: ' + placeholer} /> : null}
-            {type === 'textarea' ? <textarea className={classNames(styles.textarea, styles.input)} onChange={(e) => setValue(e.target.value)} placeholder={placeholer && 'Пример: ' + placeholer} /> : null}
+            {type === 'textarea' ? <textarea value={value} className={classNames(styles.textarea, styles.input)} onChange={(e) => setValue(e.target.value)} placeholder={placeholer && 'Пример: ' + placeholer} /> : null}
         </div>
     )
 }

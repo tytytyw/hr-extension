@@ -1,22 +1,74 @@
+// @ts-nocheck
 import styles from './App.module.sass';
 import Header from '../Header'
 import Setting from '../Setting';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import VacanciesList from '../VacanciesList'
 import Loader from '../Loader'
+import Error from '../Error'
+
 
 const App = () => {
     const [connected, setConnected] = useState<boolean>(false)
     const [requestParams, setRequestParams] = useState({
-        serverUrl: 'https://arenda.topfactor.pro/RecLCH/hs/extension',
-        databaseUrl: '',
-        portUrl: '',
-        token: '0JHRg9GA0LXQu9C+0LzQvtCy0LAg0JDQvdC90LA6MTIzNA=='
+        serverUrl: localStorage.getItem('serverUrl') || '',
+        databaseUrl: localStorage.getItem('databaseUrl') || '',
+        portUrl: localStorage.getItem('portUrl') || '',
+        token: localStorage.getItem('token') || ''
     })
     const [showLoader, setShowLoader] = useState<boolean>(false)
-
+    const [showError, setShowError] = useState<showError>({ show: false })
     const [vacancies, setVacancies] = useState<Array<{ GUID: string, title: string }>>([])
 
+
+    useEffect(() => {
+        localStorage.getItem('connected') === 'true' && setConnected(true)
+    }, [])
+
+
+    const getVacancyList = () => {
+        setShowLoader(true)
+
+        if (requestParams.serverUrl && requestParams.token) {
+            // авторизация
+            fetch(`${requestParams.serverUrl + (requestParams.databaseUrl ? '/' + requestParams.databaseUrl : '') + (requestParams.portUrl ? ':' + requestParams.portUrl : '')}/vacancy/vacancy`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': "Basic " + requestParams.token,
+                    'Access-Control-Allow-Origin': '*'
+
+                },
+            })
+                .then(res => {
+                    if (res.status === 200) {
+                        res.json().then((data) => {
+                            if (data) {
+                                setVacancies(data)
+                            }
+                        })
+
+                    } else if (res.status === 401) {
+                        // ошибка авториз
+                        setShowError({ show: true, title: 'Ошибка авторизации', text: 'Проверьте правильность введенных данных и повторите' })
+                        setConnected(false);
+                        localStorage.setItem("connected", "false")
+                    } else {
+                        setShowError({ show: true })
+                    }
+                })
+                .catch(er => {
+
+                    setShowError({ show: true, title: 'Ошибка соединения', text: 'Проверьте данные соединения' })
+                    setConnected(false);
+                    localStorage.setItem("connected", "false")
+                })
+                .finally(() => setShowLoader(false))
+        } else {
+            localStorage.setItem("connected", "false")
+            setConnected(false)
+            setShowLoader(false)
+        }
+    }
 
 
     return (
@@ -28,6 +80,8 @@ const App = () => {
                     vacancies={vacancies}
                     requestParams={requestParams}
                     setShowLoader={setShowLoader}
+                    setConnected={setConnected}
+                    getVacancyList={getVacancyList}
                 />
                 : <Setting
                     setConnected={setConnected}
@@ -37,7 +91,20 @@ const App = () => {
                     vacancies={vacancies}
                     setShowLoader={setShowLoader}
                 />}
+
             {showLoader ? <Loader /> : ''}
+
+            {showError.show ?
+                <Error setDouble={
+                    showError.double ?
+                        () => { sendCadidate(true) }
+                        : null}
+                    close={() => setShowError({ show: false })}
+                    closeText={showError.closeText}
+                    title={showError?.title}
+                    text={showError?.text} /> : ''
+            }
+
         </div>
     );
 }

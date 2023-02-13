@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/hr-extension/static/css/main.89c61487.css",
+    "main.js": "/hr-extension/static/js/main.0d5dd92b.js",
+    "static/media/settings.svg": "/hr-extension/static/media/settings.04ca1d381d929d85846514b98cf87ee4.svg",
+    "index.html": "/hr-extension/index.html",
+    "static/media/1c_icon.svg": "/hr-extension/static/media/1c_icon.c070e305f86491be3303d3c1f321b91a.svg",
+    "main.89c61487.css.map": "/hr-extension/static/css/main.89c61487.css.map",
+    "main.0d5dd92b.js.map": "/hr-extension/static/js/main.0d5dd92b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.89c61487.css",
+    "static/js/main.0d5dd92b.js"
+  ]
+}

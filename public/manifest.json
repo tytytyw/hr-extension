@@ -1,7 +1,7 @@
 {
   "name": "hr extension",
   "version": "1.0.0",
-  "description": "A cool extension",
+  "description": "Добавление резюме кандитатов в базу",
   "permissions": [
     "storage",
     "tabs"
@@ -13,5 +13,11 @@
   "action": {
     "default_title": "hr extension",
     "default_popup": "index.html"
+  },
+  "storage": {
+    "managed_schema": "schema.json"
+  },
+  "icons": {
+    "64": "icon.png"
   }
 }

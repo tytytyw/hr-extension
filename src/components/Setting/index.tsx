@@ -16,7 +16,6 @@ interface SettingProps {
 	setConnected: (connected: boolean) => void;
 	requestParams: requestParamsProps;
 	saveRequestParams: (requestParams: requestParamsProps) => void;
-	setVacancies: (vacancies: Array<{ GUID: string, title: string }>) => void;
 	vacancies?: Array<{ GUID: string, title: string }>;
 	setShowLoader: (showLoader: boolean) => void
 }
@@ -27,49 +26,13 @@ interface showError {
 	text?: string;
 }
 
-const Setting: FC<SettingProps> = ({ setConnected, requestParams, vacancies, saveRequestParams, setVacancies, setShowLoader }) => {
+const Setting: FC<SettingProps> = ({ setConnected, requestParams, vacancies, saveRequestParams, setShowLoader }) => {
 	const [serverUrl, setServerUrl] = useState<string>(requestParams.serverUrl)
 	const [databaseUrl, setDatabaseUrl] = useState<string>(requestParams.databaseUrl)
 	const [token, setToken] = useState<string>(requestParams.token)
 	const [portUrl, setPortUrl] = useState<string>(requestParams.portUrl)
 	const [showError, setShowError] = useState<showError>({ show: false })
 
-
-	const getVacancyList = () => {
-		setShowLoader(true)
-
-		if (serverUrl && token) {
-			// авторизация
-			fetch(`${serverUrl + (databaseUrl ? '/' + databaseUrl : '') + (portUrl ? ':' + portUrl : '')}/vacancy/vacancy`, {
-				method: 'GET',
-				headers: {
-					'Authorization': "Basic " + token,
-					'Access-Control-Allow-Origin': '*'
-
-				},
-			})
-				.then(res => {
-					if (res.status === 200) {
-						res.json().then((data) => {
-							if (data) {
-								setVacancies(data)
-							}
-						})
-
-					} else if (res.status === 401) {
-						// ошибка авториз
-						setShowError({ show: true, title: 'Ошибка авторизации', text: 'Пожалуйста, получите токен доступа для данного работного сайта в программе' })
-					} else {
-						setShowError({ show: true })
-					}
-				})
-				.catch(er => {
-
-					setShowError({ show: true })
-				})
-				.finally(() => setShowLoader(false))
-		}
-	}
 
 	const connectToAuth = () => {
 		setShowLoader(true)
@@ -88,8 +51,13 @@ const Setting: FC<SettingProps> = ({ setConnected, requestParams, vacancies, sav
 				.then(res => {
 					if (res.status === 200) {
 
-						saveRequestParams({ serverUrl, databaseUrl, token, portUrl })
-						getVacancyList()
+						saveRequestParams({ serverUrl, databaseUrl, token, portUrl });
+
+						localStorage.setItem("serverUrl", serverUrl)
+						localStorage.setItem("databaseUrl", databaseUrl)
+						localStorage.setItem("token", token)
+						localStorage.setItem("portUrl", portUrl)
+						localStorage.setItem("connected", "true")
 
 						// next step
 						setConnected(true)
@@ -97,14 +65,18 @@ const Setting: FC<SettingProps> = ({ setConnected, requestParams, vacancies, sav
 					} else if (res.status === 401) {
 						// ошибка авториз
 						setShowError({ show: true, title: 'Ошибка авторизации', text: 'Проверьте правильность введенных данных и повторите' })
+						setConnected(false)
+						localStorage.setItem("connected", "false")
 					} else {
-						// TODO:
-						console.log('error')
+						setConnected(false);
+						localStorage.setItem("connected", "false")
 					}
 				})
 				.catch(er => {
-
-					setShowError({ show: true })
+					console.log('err', er)
+					setShowError({ show: true, title: 'Ошибка соединения', text: 'Проверьте данные соединения' })
+					setConnected(false);
+					localStorage.setItem("connected", "false")
 				})
 				.finally(() => setShowLoader(false))
 

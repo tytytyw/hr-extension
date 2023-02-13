@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import styles from './Header.module.sass'
-import { ReactComponent as MainIcon } from "./1c_icon.svg";
+import { ReactComponent as MainIcon } from "./icon.svg";
 import { ReactComponent as SettingIcon } from './settings.svg'
 
 interface HeaderProps {

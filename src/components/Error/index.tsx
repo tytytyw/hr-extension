@@ -21,7 +21,7 @@ const Error: FC<ErrorProps> = ({
         <div className={styles.wrapper}>
             <div className={styles.content}>
                 <div className={styles.header}>{title}</div>
-                <div className={styles.text}>{text}</div>
+                <div className={styles.text}>{text.split(',').map((item, i) => <p key={i}>{item}</p>)}</div>
                 <div className={styles.buttonWrapper}>
                     {setDouble ? <Button text='Все равно добавить' callback={setDouble} /> : ''}
                     <Button text={closeText} callback={close} />
