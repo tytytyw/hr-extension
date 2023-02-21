@@ -69,16 +69,11 @@ const VacanciesList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
 
                             else if (res.status === 401) {
                                 // ошибка авториз
-                                setConnected(false);
-                                localStorage.setItem("connected", "false")
                                 setShowError({ show: true, closeText: 'Закрыть', title: 'Ошибка авторизации', text: 'Пожалуйста, получите токен доступа для данного работного сайта в программе' })
 
                             } else if (res.status === 404) {
-                                // ошибка авториз
-                                setConnected(false);
-                                localStorage.setItem("connected", "false")
-                                setShowError({ show: true, closeText: 'Закрыть', title: 'Ошибка авторизации', text: 'Пожалуйста, получите токен доступа для данного работного сайта в программе' })
-
+                                // ошибка подключения
+                                setShowError({ show: true, title: 'Ошибка подключения', text: 'Проверьте правильность введенных данных, информационная база недоступна' })
                             } else if (res.status === 301) {
                                 // сайте не поддерживается
                                 setShowError({ show: true, text: 'Данный работный сайт не поддерживается программой', closeText: 'Закрыть' })

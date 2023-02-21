@@ -68,10 +68,8 @@ const Setting: FC<SettingProps> = ({ setConnected, requestParams, vacancies, sav
 						setConnected(false)
 						localStorage.setItem("connected", "false")
 					} else if (res.status === 404) {
-						// ошибка авториз
-						setShowError({ show: true, title: 'Ошибка авторизации', text: 'Проверьте правильность введенных данных и повторите' })
-						setConnected(false)
-						localStorage.setItem("connected", "false")
+						// ошибка подключения
+						setShowError({ show: true, title: 'Ошибка подключения', text: 'Проверьте правильность введенных данных, информационная база недоступна' })
 					} else {
 						setConnected(false);
 						localStorage.setItem("connected", "false")
