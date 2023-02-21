@@ -31,7 +31,7 @@ const App = () => {
 
         if (requestParams.serverUrl && requestParams.token) {
             // авторизация
-            fetch(`${requestParams.serverUrl + (requestParams.databaseUrl ? '/' + requestParams.databaseUrl : '') + (requestParams.portUrl ? ':' + requestParams.portUrl : '')}/vacancy/vacancy`, {
+            fetch(`${requestParams.serverUrl + (requestParams.databaseUrl ? '/' + requestParams.databaseUrl : '') + (requestParams.portUrl ? ':' + requestParams.portUrl : '')}/hs/extension/vacancy/vacancy`, {
                 method: 'GET',
                 headers: {
                     'Authorization': "Basic " + requestParams.token,
@@ -43,11 +43,23 @@ const App = () => {
                     if (res.status === 200) {
                         res.json().then((data) => {
                             if (data) {
-                                setVacancies(data)
+
+                                if (data.length) {
+                                    setVacancies(data)
+                                } else {
+                                    setShowError({ show: true, title: 'Список вакансий отсуствует', text: 'Попробуйте зайти позже или использовать другой токен доступа' })
+                                    setConnected(false);
+                                    localStorage.setItem("connected", "false")
+                                }
                             }
                         })
 
                     } else if (res.status === 401) {
+                        // ошибка авториз
+                        setShowError({ show: true, title: 'Ошибка авторизации', text: 'Проверьте правильность введенных данных и повторите' })
+                        setConnected(false);
+                        localStorage.setItem("connected", "false")
+                    } else if (res.status === 404) {
                         // ошибка авториз
                         setShowError({ show: true, title: 'Ошибка авторизации', text: 'Проверьте правильность введенных данных и повторите' })
                         setConnected(false);
@@ -92,7 +104,7 @@ const App = () => {
                     setShowLoader={setShowLoader}
                 />}
 
-            {showLoader ? <Loader /> : ''}
+            {showLoader ? <Loader setShowError={setShowError} setConnected={setConnected} /> : ''}
 
             {showError.show ?
                 <Error setDouble={

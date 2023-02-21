@@ -21,6 +21,7 @@ const VacanciesList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
 
     useEffect(() => {
         getVacancyList()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
@@ -39,8 +40,6 @@ const VacanciesList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
             chrome && chrome.tabs && chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
                 candidateUrl = tabs[0].url;
 
-                console.log(candidateUrl)
-
                 if (candidateUrl) {
                     setShowLoader(true)
 
@@ -51,7 +50,7 @@ const VacanciesList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
                         comment: comment
                     }
 
-                    fetch(`${serverUrl + (databaseUrl ? '/' + databaseUrl : '') + (portUrl ? ':' + portUrl : '')}/candidates/candidates`, {
+                    fetch(`${serverUrl + (databaseUrl ? '/' + databaseUrl : '') + (portUrl ? ':' + portUrl : '')}/hs/extension/candidates/candidates`, {
                         method: 'POST',
                         headers: {
                             'Authorization': "Basic " + token,
@@ -69,6 +68,12 @@ const VacanciesList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
                             }
 
                             else if (res.status === 401) {
+                                // ошибка авториз
+                                setConnected(false);
+                                localStorage.setItem("connected", "false")
+                                setShowError({ show: true, closeText: 'Закрыть', title: 'Ошибка авторизации', text: 'Пожалуйста, получите токен доступа для данного работного сайта в программе' })
+
+                            } else if (res.status === 404) {
                                 // ошибка авториз
                                 setConnected(false);
                                 localStorage.setItem("connected", "false")

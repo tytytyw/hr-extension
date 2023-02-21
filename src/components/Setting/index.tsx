@@ -39,7 +39,7 @@ const Setting: FC<SettingProps> = ({ setConnected, requestParams, vacancies, sav
 
 		if (serverUrl && token) {
 			// авторизация
-			fetch(`${serverUrl + (databaseUrl ? '/' + databaseUrl : '') + (portUrl ? ':' + portUrl : '')}/auth`, {
+			fetch(`${serverUrl + (databaseUrl ? '/' + databaseUrl : '') + (portUrl ? ':' + portUrl : '')}/hs/extension/auth`, {
 				method: 'GET',
 				// mode: 'no-cors',
 
@@ -63,6 +63,11 @@ const Setting: FC<SettingProps> = ({ setConnected, requestParams, vacancies, sav
 						setConnected(true)
 
 					} else if (res.status === 401) {
+						// ошибка авториз
+						setShowError({ show: true, title: 'Ошибка авторизации', text: 'Проверьте правильность введенных данных и повторите' })
+						setConnected(false)
+						localStorage.setItem("connected", "false")
+					} else if (res.status === 404) {
 						// ошибка авториз
 						setShowError({ show: true, title: 'Ошибка авторизации', text: 'Проверьте правильность введенных данных и повторите' })
 						setConnected(false)
