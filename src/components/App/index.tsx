@@ -47,7 +47,7 @@ const App = () => {
                                 if (data.length) {
                                     setVacancies(data)
                                 } else {
-                                    setShowError({ show: true, title: 'Список вакансий отсуствует', text: 'Попробуйте зайти позже или использовать другой токен доступа' })
+                                    setShowError({ show: true, title: 'Список вакансий отсутствует', text: 'Попробуйте зайти позже или использовать другой токен доступа' })
                                     setConnected(false);
                                     localStorage.setItem("connected", "false")
                                 }
