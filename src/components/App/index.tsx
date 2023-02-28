@@ -101,7 +101,7 @@ const App = () => {
                     setShowLoader={setShowLoader}
                 />}
 
-            {showLoader ? <Loader setShowError={setShowError} setConnected={setConnected} /> : ''}
+            {showLoader ? <Loader setShowError={setShowError} setConnected={setConnected} setShowLoader={setShowLoader} /> : ''}
 
             {showError.show ?
                 <Error setDouble={

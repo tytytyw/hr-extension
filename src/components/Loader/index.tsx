@@ -11,16 +11,18 @@ interface showError {
 interface LoaderProps {
     setShowError: (obj: showError) => void;
     showError: showError;
-    setConnected: (conected: boolean) => void
+    setConnected: (conected: boolean) => void;
+    setShowLoader: (conected: boolean) => void;
 }
 
-const Loader: FC<LoaderProps> = ({ setShowError, setConnected }) => {
+const Loader: FC<LoaderProps> = ({ setShowError, setConnected, setShowLoader }) => {
 
     useEffect(() => {
         const timeOut = setTimeout(() => {
             localStorage.setItem("connected", "false")
             setConnected(false);
             setShowError({ show: true, title: 'Нет ответа от сервера', text: 'Проверьте настройки или попробуйте подключиться позже' })
+            setShowLoader(false)
         }, 5000);
         return () => clearTimeout(timeOut)
         // eslint-disable-next-line react-hooks/exhaustive-deps
