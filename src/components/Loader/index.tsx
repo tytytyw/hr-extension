@@ -23,7 +23,7 @@ const Loader: FC<LoaderProps> = ({ setShowError, setConnected, setShowLoader }) 
             setConnected(false);
             setShowError({ show: true, title: 'Нет ответа от сервера', text: 'Проверьте настройки или попробуйте подключиться позже' })
             setShowLoader(false)
-        }, 5000);
+        }, 8000);
         return () => clearTimeout(timeOut)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
